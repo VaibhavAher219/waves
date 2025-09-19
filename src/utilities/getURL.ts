@@ -4,7 +4,9 @@ export const getServerSideURL = () => {
   let url = process.env.NEXT_PUBLIC_SERVER_URL
 
   if (!url && process.env.VERCEL_PROJECT_PRODUCTION_URL) {
-    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    // Ensure VERCEL_PROJECT_PRODUCTION_URL has https:// prefix
+    const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+    url = vercelUrl.startsWith('http') ? vercelUrl : `https://${vercelUrl}`
   }
 
   if (!url) {
@@ -24,7 +26,8 @@ export const getClientSideURL = () => {
   }
 
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
-    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+    return vercelUrl.startsWith('http') ? vercelUrl : `https://${vercelUrl}`
   }
 
   return process.env.NEXT_PUBLIC_SERVER_URL || ''

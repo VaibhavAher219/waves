@@ -7,7 +7,7 @@ const getPagesSitemap = unstable_cache(
   async () => {
     const SITE_URL =
       process.env.NEXT_PUBLIC_SERVER_URL ||
-      process.env.VERCEL_PROJECT_PRODUCTION_URL ||
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null) ||
       'https://example.com'
 
     const dateFallback = new Date().toISOString()
