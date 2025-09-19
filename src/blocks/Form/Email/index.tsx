@@ -10,7 +10,7 @@ import { Width } from '../Width'
 
 export const Email: React.FC<
   EmailField & {
-    errors: Partial<FieldErrorsImpl>
+    errors: Partial<FieldErrorsImpl<FieldValues>>
     register: UseFormRegister<FieldValues>
   }
 > = ({ name, defaultValue, errors, label, register, required, width }) => {

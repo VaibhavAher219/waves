@@ -32,7 +32,12 @@ export const FormBlock: React.FC<
   } = props
 
   const formMethods = useForm({
-    defaultValues: formFromProps.fields,
+    defaultValues: formFromProps.fields?.reduce((acc, field) => {
+      if (field.blockType !== 'message' && 'name' in field) {
+        acc[field.name] = field.defaultValue || ''
+      }
+      return acc
+    }, {} as Record<string, any>) || {},
   })
   const {
     control,
@@ -47,7 +52,7 @@ export const FormBlock: React.FC<
   const router = useRouter()
 
   const onSubmit = useCallback(
-    (data: FormFieldBlock[]) => {
+    (data: Record<string, any>) => {
       let loadingTimerID: ReturnType<typeof setTimeout>
       const submitForm = async () => {
         setError(undefined)
@@ -133,7 +138,7 @@ export const FormBlock: React.FC<
                   formFromProps.fields?.map((field, index) => {
                     const Field = fields?.[field.blockType as keyof typeof fields] as React.FC<
                       FormFieldBlock & {
-                        errors: Partial<FieldErrorsImpl>
+                        errors: Partial<FieldErrorsImpl<FieldValues>>
                         register: UseFormRegister<FieldValues>
                         form: FormType
                       }

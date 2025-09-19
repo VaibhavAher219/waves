@@ -19,7 +19,7 @@ import { stateOptions } from './options'
 export const State: React.FC<
   StateField & {
     control: Control
-    errors: Partial<FieldErrorsImpl>
+    errors: Partial<FieldErrorsImpl<FieldValues>>
   }
 > = ({ name, control, errors, label, required, width }) => {
   return (

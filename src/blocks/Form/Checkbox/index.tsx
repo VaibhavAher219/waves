@@ -12,7 +12,7 @@ import { Width } from '../Width'
 
 export const Checkbox: React.FC<
   CheckboxField & {
-    errors: Partial<FieldErrorsImpl>
+    errors: Partial<FieldErrorsImpl<FieldValues>>
     register: UseFormRegister<FieldValues>
   }
 > = ({ name, defaultValue, errors, label, register, required, width }) => {
