@@ -37,6 +37,9 @@ export default async function ResourcesPage() {
       excerpt: true,
       featuredImage: true,
       meta: true,
+      content: true,
+      updatedAt: true,
+      createdAt: true,
     },
   })
 
