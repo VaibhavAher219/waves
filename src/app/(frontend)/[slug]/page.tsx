@@ -2,10 +2,10 @@ import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
-import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
+import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
-import { homeStatic } from '@/endpoints/seed/home-static'
+import Link from 'next/link'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
@@ -48,9 +48,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { slug = 'home' } = await paramsPromise
   const url = '/' + slug
 
-  let page: RequiredDataFromCollectionSlug<'pages'> | null
-
-  page = await queryPageBySlug({
+  const page = await queryPageBySlug({
     slug,
   })
 
@@ -88,12 +86,12 @@ export default async function Page({ params: paramsPromise }: Args) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </button>
-              <a 
+              <Link 
                 href="/posts"
                 className="inline-flex items-center px-8 py-4 border-2 border-gray-300 text-gray-700 font-medium rounded-xl hover:border-blue-600 hover:text-blue-600 transition-all duration-300"
               >
                 Explore Our Blog
-              </a>
+              </Link>
             </div>
             
             {/* Wave visualization */}
@@ -187,7 +185,7 @@ export default async function Page({ params: paramsPromise }: Args) {
                   </div>
                 </div>
                 <blockquote className="text-gray-700 mb-6 text-lg leading-relaxed">
-                  "Wave reduced our estimate generation time from 3 days to 15 minutes. The accuracy is incredible and our customers are thrilled with the faster service."
+                  &ldquo;Wave reduced our estimate generation time from 3 days to 15 minutes. The accuracy is incredible and our customers are thrilled with the faster service.&rdquo;
                 </blockquote>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
@@ -212,7 +210,7 @@ export default async function Page({ params: paramsPromise }: Args) {
                   </div>
                 </div>
                 <blockquote className="text-gray-700 mb-6 text-lg leading-relaxed">
-                  "The AI accuracy is phenomenal. Wave catches details that human assessors sometimes miss, and the comprehensive reports save us hours of documentation work."
+                  &ldquo;The AI accuracy is phenomenal. Wave catches details that human assessors sometimes miss, and the comprehensive reports save us hours of documentation work.&rdquo;
                 </blockquote>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
@@ -237,7 +235,7 @@ export default async function Page({ params: paramsPromise }: Args) {
                   </div>
                 </div>
                 <blockquote className="text-gray-700 mb-6 text-lg leading-relaxed">
-                  "Our customer satisfaction scores increased by 40% after implementing Wave. Faster estimates mean happier customers and better business relationships."
+                  &ldquo;Our customer satisfaction scores increased by 40% after implementing Wave. Faster estimates mean happier customers and better business relationships.&rdquo;
                 </blockquote>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">

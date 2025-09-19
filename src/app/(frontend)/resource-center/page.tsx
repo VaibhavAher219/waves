@@ -1,11 +1,12 @@
 import type { Metadata } from 'next/types'
-import { CollectionArchive } from '@/components/CollectionArchive'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+import type { Resource } from '@/payload-types'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -56,7 +57,7 @@ export default async function ResourcesPage() {
             Resource Center
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Everything you need to transform your estimate report generation with Wave's AI-powered damage assessment technology.
+            Everything you need to transform your estimate report generation with Wave&apos;s AI-powered damage assessment technology.
           </p>
         </div>
       </div>
@@ -82,7 +83,7 @@ export default async function ResourcesPage() {
       <div className="py-16">
         <div className="container mb-8">
           <PageRange
-            collection="resources"
+            collectionLabels={{ plural: 'Resources', singular: 'Resource' }}
             currentPage={resources.page}
             limit={12}
             totalDocs={resources.totalDocs}
@@ -115,7 +116,7 @@ export default async function ResourcesPage() {
 }
 
 // Resource Card Component
-function ResourceCard({ resource }: { resource: any }) {
+function ResourceCard({ resource }: { resource: Resource }) {
   const getResourceIcon = (type: string) => {
     switch (type) {
       case 'case-study':
@@ -141,11 +142,12 @@ function ResourceCard({ resource }: { resource: any }) {
     <article className="group bg-white rounded-2xl border border-gray-100 hover:border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden hover:-translate-y-1">
       {/* Resource Image */}
       <div className="relative w-full aspect-[16/9] bg-gradient-to-br from-gray-50 to-gray-100">
-        {resource.featuredImage ? (
-          <img 
-            src={resource.featuredImage.url} 
+        {resource.featuredImage && typeof resource.featuredImage === 'object' && resource.featuredImage.url ? (
+          <Image 
+            src={resource.featuredImage.url || ''} 
             alt={resource.title}
-            className="object-cover w-full h-full"
+            fill
+            className="object-cover"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -165,7 +167,7 @@ function ResourceCard({ resource }: { resource: any }) {
         
         {/* Title */}
         <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
-          <Link href={`/resource-center/${resource.slug}`} className="hover:no-underline">
+          <Link href={`/resource-center/${resource.slug || resource.id}`} className="hover:no-underline">
             {resource.title}
           </Link>
         </h3>

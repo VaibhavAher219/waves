@@ -3,6 +3,7 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
+import Image from 'next/image'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
 import Link from 'next/link'
@@ -35,7 +36,7 @@ type Args = {
 }
 
 export default async function ResourcePage({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
+  const { isEnabled: _draft } = await draftMode()
   const { slug = '' } = await paramsPromise
   const url = '/resource-center/' + slug
   const resource = await queryResourceBySlug({ slug })
@@ -112,10 +113,11 @@ export default async function ResourcePage({ params: paramsPromise }: Args) {
       {resource.featuredImage && typeof resource.featuredImage !== 'string' && (
         <div className="relative">
           <div className="aspect-[21/9] md:aspect-[21/8] lg:aspect-[21/7] overflow-hidden">
-            <img 
-              src={resource.featuredImage.url} 
+            <Image 
+              src={typeof resource.featuredImage !== 'number' ? resource.featuredImage.url || '' : ''} 
               alt={resource.title}
-              className="object-cover w-full h-full"
+              fill
+              className="object-cover"
             />
           </div>
         </div>

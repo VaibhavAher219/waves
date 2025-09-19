@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import Image from 'next/image'
 import React from 'react'
 
 interface Props {
@@ -16,12 +17,14 @@ export const Logo = (props: Props) => {
   return (
     <div className={clsx('flex items-center', className)}>
       {/* Wave Logo Image */}
-      <img 
+      <Image 
         src="/media/WAVE transparent black.png" 
         alt="Wave"
+        width={120}
+        height={32}
         className="h-8 w-auto"
         loading={loading}
-        style={{ priority }}
+        priority={priority === 'high'}
       />
     </div>
   )

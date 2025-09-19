@@ -54,7 +54,7 @@ const testimonials = [
     avatar: 'D',
     avatarColor: 'from-orange-500 to-orange-600',
     rating: 5,
-    testimonial: "Integration was seamless and the API is robust. Wave's technology stack is impressive and their support team is outstanding. We've processed over 10,000 assessments with 99.2% accuracy.",
+    testimonial: "Integration was seamless and the API is robust. Wave&apos;s technology stack is impressive and their support team is outstanding. We&apos;ve processed over 10,000 assessments with 99.2% accuracy.",
     metrics: {
       apiUptime: '99.9%',
       integrationTime: '2 weeks'
@@ -82,7 +82,7 @@ const testimonials = [
     avatar: 'R',
     avatarColor: 'from-indigo-500 to-indigo-600',
     rating: 5,
-    testimonial: "The cost savings and efficiency gains from Wave are remarkable. We've reduced our operational costs by 35% while improving service quality. It's a game-changer for the insurance industry.",
+    testimonial: "The cost savings and efficiency gains from Wave are remarkable. We&apos;ve reduced our operational costs by 35% while improving service quality. It&apos;s a game-changer for the insurance industry.",
     metrics: {
       costReduction: '35%',
       efficiencyGain: '250%'
@@ -184,7 +184,7 @@ export default async function TestimonialsPage() {
                 
                 {/* Testimonial */}
                 <blockquote className="text-gray-700 mb-6 text-lg leading-relaxed">
-                  "{testimonial.testimonial}"
+                  &ldquo;{testimonial.testimonial}&rdquo;
                 </blockquote>
                 
                 {/* Author */}
@@ -222,7 +222,7 @@ export default async function TestimonialsPage() {
             Ready to Join Our Success Stories?
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-12">
-            Join hundreds of insurance companies who have transformed their estimate report generation with Wave's AI technology.
+            Join hundreds of insurance companies who have transformed their estimate report generation with Wave&apos;s AI technology.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <button className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-lg">

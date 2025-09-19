@@ -53,7 +53,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
         {/* Dropdown Menu */}
         {isResourceDropdownOpen && (
           <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-            {resourceTypes.map((resource, index) => (
+            {resourceTypes.map((resource) => (
               <Link
                 key={resource.value}
                 href={resource.href}

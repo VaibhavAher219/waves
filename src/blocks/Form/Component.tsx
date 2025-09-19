@@ -3,7 +3,7 @@ import type { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-b
 
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { useForm, FormProvider, type FieldErrorsImpl, type FieldValues, type UseFormRegister } from 'react-hook-form'
 import RichText from '@/components/RichText'
 import { Button } from '@/components/ui/button'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
@@ -131,8 +131,13 @@ export const FormBlock: React.FC<
                 {formFromProps &&
                   formFromProps.fields &&
                   formFromProps.fields?.map((field, index) => {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const Field: React.FC<any> = fields?.[field.blockType as keyof typeof fields]
+                    const Field = fields?.[field.blockType as keyof typeof fields] as React.FC<
+                      FormFieldBlock & {
+                        errors: Partial<FieldErrorsImpl>
+                        register: UseFormRegister<FieldValues>
+                        form: FormType
+                      }
+                    >
                     if (Field) {
                       return (
                         <div className="mb-6 last:mb-0" key={index}>
