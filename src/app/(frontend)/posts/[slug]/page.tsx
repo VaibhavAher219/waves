@@ -17,23 +17,43 @@ import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const posts = await payload.find({
-    collection: 'posts',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
+  // Skip static generation if no database connection is available
+  if (!process.env.DATABASE_URI) {
+    console.warn('DATABASE_URI not available, skipping static generation for posts')
+    return [
+      { slug: 'digital-horizons' },
+      { slug: 'global-gaze' },
+      { slug: 'dollar-and-sense-the-financial-forecast' },
+    ]
+  }
 
-  const params = posts.docs.map(({ slug }) => {
-    return { slug }
-  })
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const posts = await payload.find({
+      collection: 'posts',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: {
+        slug: true,
+      },
+    })
 
-  return params
+    const params = posts.docs.map(({ slug }) => {
+      return { slug }
+    })
+
+    return params || []
+  } catch (error) {
+    console.warn('Failed to generate static params for posts:', error)
+    // Return default posts that should exist from seed data
+    return [
+      { slug: 'digital-horizons' },
+      { slug: 'global-gaze' },
+      { slug: 'dollar-and-sense-the-financial-forecast' },
+    ]
+  }
 }
 
 type Args = {

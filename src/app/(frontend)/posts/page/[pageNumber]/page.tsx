@@ -70,19 +70,33 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 }
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const { totalDocs } = await payload.count({
-    collection: 'posts',
-    overrideAccess: false,
-  })
-
-  const totalPages = Math.ceil(totalDocs / 10)
-
-  const pages: { pageNumber: string }[] = []
-
-  for (let i = 1; i <= totalPages; i++) {
-    pages.push({ pageNumber: String(i) })
+  // Skip static generation if no database connection is available
+  if (!process.env.DATABASE_URI) {
+    console.warn('DATABASE_URI not available, skipping static generation for post pages')
+    return [{ pageNumber: '1' }]
   }
 
-  return pages
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const { totalDocs } = await payload.count({
+      collection: 'posts',
+      overrideAccess: false,
+    })
+
+    const totalPages = Math.ceil(totalDocs / 10)
+
+    const pages: { pageNumber: string }[] = []
+
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push({ pageNumber: String(i) })
+    }
+
+    return pages
+  } catch (error) {
+    console.warn('Failed to generate static params for post pages:', error)
+    // Return first page only as fallback
+    return [
+      { pageNumber: '1' }
+    ]
+  }
 }

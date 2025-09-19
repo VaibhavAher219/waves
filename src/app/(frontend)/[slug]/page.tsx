@@ -14,27 +14,45 @@ import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const pages = await payload.find({
-    collection: 'pages',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
+  // Skip static generation if no database connection is available
+  if (!process.env.DATABASE_URI) {
+    console.warn('DATABASE_URI not available, skipping static generation for pages')
+    return [
+      { slug: 'contact' },
+      { slug: 'testimonials' },
+    ]
+  }
 
-  const params = pages.docs
-    ?.filter((doc) => {
-      return doc.slug !== 'home'
-    })
-    .map(({ slug }) => {
-      return { slug }
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const pages = await payload.find({
+      collection: 'pages',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: {
+        slug: true,
+      },
     })
 
-  return params
+    const params = pages.docs
+      ?.filter((doc) => {
+        return doc.slug !== 'home'
+      })
+      .map(({ slug }) => {
+        return { slug }
+      })
+
+    return params || []
+  } catch (error) {
+    console.warn('Failed to generate static params for pages:', error)
+    // Return default pages that should exist
+    return [
+      { slug: 'contact' },
+      { slug: 'testimonials' },
+    ]
+  }
 }
 
 type Args = {

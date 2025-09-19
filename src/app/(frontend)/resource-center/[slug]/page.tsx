@@ -10,23 +10,35 @@ import Link from 'next/link'
 import { generateMeta } from '@/utilities/generateMeta'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const resources = await payload.find({
-    collection: 'resources',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
+  // Skip static generation if no database connection is available
+  if (!process.env.DATABASE_URI) {
+    console.warn('DATABASE_URI not available, skipping static generation for resources')
+    return []
+  }
 
-  const params = resources.docs.map(({ slug }) => {
-    return { slug }
-  })
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const resources = await payload.find({
+      collection: 'resources',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: {
+        slug: true,
+      },
+    })
 
-  return params
+    const params = resources.docs.map(({ slug }) => {
+      return { slug }
+    })
+
+    return params || []
+  } catch (error) {
+    console.warn('Failed to generate static params for resources:', error)
+    // Return empty array - resources will be generated on-demand
+    return []
+  }
 }
 
 type Args = {
