@@ -7,14 +7,25 @@ import { unstable_cache } from 'next/cache'
 type Global = keyof Config['globals']
 
 async function getGlobal(slug: Global, depth = 0) {
-  const payload = await getPayload({ config: configPromise })
+  // Skip database connection if not available during build
+  if (!process.env.DATABASE_URI) {
+    console.warn(`DATABASE_URI not available, skipping global fetch for ${slug}`)
+    return null
+  }
 
-  const global = await payload.findGlobal({
-    slug,
-    depth,
-  })
+  try {
+    const payload = await getPayload({ config: configPromise })
 
-  return global
+    const global = await payload.findGlobal({
+      slug,
+      depth,
+    })
+
+    return global
+  } catch (error) {
+    console.warn(`Failed to fetch global ${slug}:`, error)
+    return null
+  }
 }
 
 /**

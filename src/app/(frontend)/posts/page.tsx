@@ -12,20 +12,31 @@ export const dynamic = 'force-static'
 export const revalidate = 600
 
 export default async function Page() {
-  const payload = await getPayload({ config: configPromise })
+  let posts = { docs: [], totalDocs: 0, page: 1, totalPages: 1 }
 
-  const posts = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 12,
-    overrideAccess: false,
-    select: {
-      title: true,
-      slug: true,
-      categories: true,
-      meta: true,
-    },
-  })
+  // Skip database connection if not available during build
+  if (!process.env.DATABASE_URI) {
+    console.warn('DATABASE_URI not available, using empty posts data')
+  } else {
+    try {
+      const payload = await getPayload({ config: configPromise })
+
+      posts = await payload.find({
+        collection: 'posts',
+        depth: 1,
+        limit: 12,
+        overrideAccess: false,
+        select: {
+          title: true,
+          slug: true,
+          categories: true,
+          meta: true,
+        },
+      })
+    } catch (error) {
+      console.warn('Failed to fetch posts:', error)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-white">

@@ -19,19 +19,30 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { pageNumber } = await paramsPromise
-  const payload = await getPayload({ config: configPromise })
-
   const sanitizedPageNumber = Number(pageNumber)
 
   if (!Number.isInteger(sanitizedPageNumber)) notFound()
 
-  const posts = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 12,
-    page: sanitizedPageNumber,
-    overrideAccess: false,
-  })
+  let posts = { docs: [], page: sanitizedPageNumber, totalDocs: 0, totalPages: 1 }
+
+  // Skip database connection if not available during build
+  if (!process.env.DATABASE_URI) {
+    console.warn('DATABASE_URI not available, using empty posts data for pagination')
+  } else {
+    try {
+      const payload = await getPayload({ config: configPromise })
+
+      posts = await payload.find({
+        collection: 'posts',
+        depth: 1,
+        limit: 12,
+        page: sanitizedPageNumber,
+        overrideAccess: false,
+      })
+    } catch (error) {
+      console.warn('Failed to fetch paginated posts:', error)
+    }
+  }
 
   return (
     <div className="pt-24 pb-24">

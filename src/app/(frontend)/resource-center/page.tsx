@@ -23,25 +23,36 @@ const resourceTypes = [
 ]
 
 export default async function ResourcesPage() {
-  const payload = await getPayload({ config: configPromise })
+  let resources = { docs: [], totalDocs: 0, page: 1, totalPages: 1 }
 
-  const resources = await payload.find({
-    collection: 'resources',
-    depth: 1,
-    limit: 12,
-    overrideAccess: false,
-    select: {
-      title: true,
-      slug: true,
-      resourceType: true,
-      excerpt: true,
-      featuredImage: true,
-      meta: true,
-      content: true,
-      updatedAt: true,
-      createdAt: true,
-    },
-  })
+  // Skip database connection if not available during build
+  if (!process.env.DATABASE_URI) {
+    console.warn('DATABASE_URI not available, using empty resources data')
+  } else {
+    try {
+      const payload = await getPayload({ config: configPromise })
+
+      resources = await payload.find({
+        collection: 'resources',
+        depth: 1,
+        limit: 12,
+        overrideAccess: false,
+        select: {
+          title: true,
+          slug: true,
+          resourceType: true,
+          excerpt: true,
+          featuredImage: true,
+          meta: true,
+          content: true,
+          updatedAt: true,
+          createdAt: true,
+        },
+      })
+    } catch (error) {
+      console.warn('Failed to fetch resources:', error)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-white">

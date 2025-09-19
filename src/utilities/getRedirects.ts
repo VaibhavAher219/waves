@@ -3,16 +3,27 @@ import { getPayload } from 'payload'
 import { unstable_cache } from 'next/cache'
 
 export async function getRedirects(depth = 1) {
-  const payload = await getPayload({ config: configPromise })
+  // Skip database connection if not available during build
+  if (!process.env.DATABASE_URI) {
+    console.warn('DATABASE_URI not available, skipping redirects fetch')
+    return []
+  }
 
-  const { docs: redirects } = await payload.find({
-    collection: 'redirects',
-    depth,
-    limit: 0,
-    pagination: false,
-  })
+  try {
+    const payload = await getPayload({ config: configPromise })
 
-  return redirects
+    const { docs: redirects } = await payload.find({
+      collection: 'redirects',
+      depth,
+      limit: 0,
+      pagination: false,
+    })
+
+    return redirects
+  } catch (error) {
+    console.warn('Failed to fetch redirects:', error)
+    return []
+  }
 }
 
 /**
