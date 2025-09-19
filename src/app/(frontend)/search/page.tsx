@@ -15,7 +15,7 @@ type Args = {
 }
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { q: query } = await searchParamsPromise
-  let posts = { docs: [], totalDocs: 0 }
+  let posts: any = { docs: [], totalDocs: 0 }
 
   // Skip database connection if not available during build
   if (!process.env.DATABASE_URI) {

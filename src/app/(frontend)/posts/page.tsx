@@ -12,7 +12,7 @@ export const dynamic = 'force-static'
 export const revalidate = 600
 
 export default async function Page() {
-  let posts = { docs: [], totalDocs: 0, page: 1, totalPages: 1 }
+  let posts: any = { docs: [], totalDocs: 0, page: 1, totalPages: 1 }
 
   // Skip database connection if not available during build
   if (!process.env.DATABASE_URI) {

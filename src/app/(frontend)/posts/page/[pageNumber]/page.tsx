@@ -23,7 +23,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   if (!Number.isInteger(sanitizedPageNumber)) notFound()
 
-  let posts = { docs: [], page: sanitizedPageNumber, totalDocs: 0, totalPages: 1 }
+  let posts: any = { docs: [], page: sanitizedPageNumber, totalDocs: 0, totalPages: 1 }
 
   // Skip database connection if not available during build
   if (!process.env.DATABASE_URI) {

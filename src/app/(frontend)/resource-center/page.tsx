@@ -23,7 +23,7 @@ const resourceTypes = [
 ]
 
 export default async function ResourcesPage() {
-  let resources = { docs: [], totalDocs: 0, page: 1, totalPages: 1 }
+  let resources: any = { docs: [], totalDocs: 0, page: 1, totalPages: 1 }
 
   // Skip database connection if not available during build
   if (!process.env.DATABASE_URI) {
