@@ -62,12 +62,12 @@ export default buildConfig({
   editor: defaultLexical,
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || '',
+      connectionString: process.env.DATABASE_URI || 'postgresql://localhost:5432/placeholder',
       idleTimeoutMillis: 60000,
-      max: 5,
-      min: 1,
+      max: process.env.DATABASE_URI ? 5 : 0, // Set max to 0 if no DATABASE_URI
+      min: 0, // Always allow 0 minimum connections
       // Add SSL configuration for Supabase
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+      ssl: process.env.NODE_ENV === 'production' && process.env.DATABASE_URI ? { rejectUnauthorized: false } : false,
     },
     push: false, // Disable automatic schema push for now
   }),

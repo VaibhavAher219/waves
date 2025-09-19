@@ -3,34 +3,24 @@ import type { Config } from 'src/payload-types'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { unstable_cache } from 'next/cache'
+import { safeDbOperation } from './isBuildTime'
 
 type Collection = keyof Config['collections']
 
 async function getDocument(collection: Collection, slug: string, depth = 0) {
-  // Skip database connection if not available during build
-  if (!process.env.DATABASE_URI) {
-    console.warn(`DATABASE_URI not available, skipping document fetch for ${collection}/${slug}`)
-    return null
-  }
-
-  try {
-    const payload = await getPayload({ config: configPromise })
-
-    const page = await payload.find({
-      collection,
-      depth,
-      where: {
-        slug: {
-          equals: slug,
-        },
-      },
-    })
-
-    return page.docs[0]
-  } catch (error) {
-    console.warn(`Failed to fetch document ${collection}/${slug}:`, error)
-    return null
-  }
+  return safeDbOperation(
+    async () => {
+      const payload = await getPayload({ config: configPromise })
+      const page = await payload.find({
+        collection,
+        depth,
+        where: { slug: { equals: slug } },
+      })
+      return page.docs[0]
+    },
+    null,
+    `document fetch for ${collection}/${slug}`
+  )
 }
 
 /**
