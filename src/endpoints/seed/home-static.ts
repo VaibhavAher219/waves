@@ -138,55 +138,60 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
   layout: [
     {
       blockType: 'content',
-      richText: {
-        root: {
-          type: 'root',
-          children: [
-            {
-              type: 'heading',
+      columns: [
+        {
+          size: 'full',
+          richText: {
+            root: {
+              type: 'root',
               children: [
                 {
-                  type: 'text',
-                  detail: 0,
-                  format: 0,
-                  mode: 'normal',
-                  style: '',
-                  text: 'Why Choose Wave?',
+                  type: 'heading',
+                  children: [
+                    {
+                      type: 'text',
+                      detail: 0,
+                      format: 0,
+                      mode: 'normal',
+                      style: '',
+                      text: 'Why Choose Wave?',
+                      version: 1,
+                    },
+                  ],
+                  direction: 'ltr',
+                  format: '',
+                  indent: 0,
+                  tag: 'h2',
+                  version: 1,
+                },
+                {
+                  type: 'paragraph',
+                  children: [
+                    {
+                      type: 'text',
+                      detail: 0,
+                      format: 0,
+                      mode: 'normal',
+                      style: '',
+                      text: 'Traditional claims processing takes weeks. Wave delivers accurate estimates in minutes using advanced AI technology that analyzes damage patterns, validates assessments, and generates comprehensive reports.',
+                      version: 1,
+                    },
+                  ],
+                  direction: 'ltr',
+                  format: '',
+                  indent: 0,
+                  textFormat: 0,
                   version: 1,
                 },
               ],
               direction: 'ltr',
               format: '',
               indent: 0,
-              tag: 'h2',
               version: 1,
             },
-            {
-              type: 'paragraph',
-              children: [
-                {
-                  type: 'text',
-                  detail: 0,
-                  format: 0,
-                  mode: 'normal',
-                  style: '',
-                  text: 'Traditional claims processing takes weeks. Wave delivers accurate estimates in minutes using advanced AI technology that analyzes damage patterns, validates assessments, and generates comprehensive reports.',
-                  version: 1,
-                },
-              ],
-              direction: 'ltr',
-              format: '',
-              indent: 0,
-              textFormat: 0,
-              version: 1,
-            },
-          ],
-          direction: 'ltr',
-          format: '',
-          indent: 0,
-          version: 1,
+          },
         },
-      },
+      ],
     },
   ],
 }

@@ -1,9 +1,9 @@
 'use client'
-import type { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-builder/types'
+import type { Form as FormType } from '@payloadcms/plugin-form-builder/types'
 
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useState } from 'react'
-import { useForm, FormProvider, type FieldErrorsImpl, type FieldValues, type UseFormRegister } from 'react-hook-form'
+import { useForm, FormProvider } from 'react-hook-form'
 import RichText from '@/components/RichText'
 import { Button } from '@/components/ui/button'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
@@ -136,24 +136,26 @@ export const FormBlock: React.FC<
                 {formFromProps &&
                   formFromProps.fields &&
                   formFromProps.fields?.map((field, index) => {
-                    const Field = fields?.[field.blockType as keyof typeof fields] as React.FC<
-                      FormFieldBlock & {
-                        errors: Partial<FieldErrorsImpl<FieldValues>>
-                        register: UseFormRegister<FieldValues>
-                        form: FormType
-                      }
-                    >
+                    const Field = fields?.[field.blockType as keyof typeof fields] as React.FC<any>
                     if (Field) {
+                      // Different field types need different props
+                      const fieldProps: any = {
+                        form: formFromProps,
+                        ...field,
+                        errors,
+                      }
+                      
+                      // Fields that use Controller (need control prop)
+                      if (['select', 'country', 'state'].includes(field.blockType)) {
+                        fieldProps.control = control
+                      } else {
+                        // Fields that use register directly
+                        fieldProps.register = register
+                      }
+
                       return (
                         <div className="mb-6 last:mb-0" key={index}>
-                          <Field
-                            form={formFromProps}
-                            {...field}
-                            {...formMethods}
-                            control={control}
-                            errors={errors}
-                            register={register}
-                          />
+                          <Field {...fieldProps} />
                         </div>
                       )
                     }

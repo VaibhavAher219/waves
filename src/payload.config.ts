@@ -63,15 +63,9 @@ export default buildConfig({
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
-      connectionTimeoutMillis: 30000,
       idleTimeoutMillis: 60000,
       max: 5,
       min: 1,
-      acquireTimeoutMillis: 30000,
-      createTimeoutMillis: 30000,
-      destroyTimeoutMillis: 5000,
-      reapIntervalMillis: 1000,
-      createRetryIntervalMillis: 500,
       // Add SSL configuration for Supabase
       ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
     },
